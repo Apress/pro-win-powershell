@@ -1,0 +1,8 @@
+<body>
+some text and an unordered list
+    <ul>
+        <li><a href="doc1.xml">doc1</a></li>
+        <li><a href="doc2.xml">doc2</a></li>
+        <li>EMPTY</li>
+    </ul>
+</body>

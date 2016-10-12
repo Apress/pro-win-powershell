@@ -1,0 +1,34 @@
+<Types>
+    <Type>
+      <Name>System.IO.FileInfo</Name>
+      <Members>
+        <PropertySet>
+            <Name>FileSecurity</Name>
+            <ReferencedProperties>
+                <Name>Name</Name>
+                <Name>Owner</Name>
+                <Name>Group</Name>
+                <Name>AccessRules</Name>
+            </ReferencedProperties>
+         </PropertySet>
+         <ScriptProperty>
+              <Name>Owner</Name>
+              <GetScriptBlock>
+              (Get-Acl $this).Owner
+              </GetScriptBlock>
+          </ScriptProperty>
+          <ScriptProperty>
+              <Name>Group</Name>
+              <GetScriptBlock>
+              (Get-Acl $this).Group
+              </GetScriptBlock>
+          </ScriptProperty>
+          <ScriptProperty>
+              <Name>AccessRules</Name>
+              <GetScriptBlock>
+              (Get-Acl $this).AccessToString
+              </GetScriptBlock>
+          </ScriptProperty>
+        </Members>
+    </Type>
+</Types>

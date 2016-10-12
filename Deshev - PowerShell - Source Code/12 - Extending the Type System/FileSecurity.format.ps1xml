@@ -1,0 +1,52 @@
+<Configuration>
+    <ViewDefinitions>
+       <View>
+            <Name>FileSecurity</Name>
+            <ViewSelectedBy>
+                <SelectionSetName>FileSystemTypes</SelectionSetName>
+            </ViewSelectedBy>
+            <GroupBy>
+                <PropertyName>PSParentPath</PropertyName> 
+                <CustomControlName>FileSystemTypes-GroupingFormat</CustomControlName>  
+            </GroupBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                      <Label>Name</Label>
+                      <Width>20</Width>
+                      <Alignment>left</Alignment>
+                   </TableColumnHeader>
+                   <TableColumnHeader>
+                      <Label>Owner</Label>
+                      <Width>12</Width>
+                      <Alignment>left</Alignment>
+                   </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>AccessRules</Label>
+                        <Alignment>left</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <Wrap/>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    (Get-Acl $_).Owner
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    (Get-Acl $_).AccessToString
+                                </ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

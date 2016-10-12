@@ -1,0 +1,91 @@
+dir | foreach -begin { $sum = 0 } –process { $sum += $_.Length } -end { echo "Total: " $sum " bytes." }
+
+
+PS C:\PowerShell> dir | foreach -begin { $sum = 0 } –process ~CCC
+    { $sum += $_.Length } -end { echo "Total: $sum bytes." }
+Total: 34 bytes.
+
+
+PS C:\PowerShell> Get-Process | Where-Object { $_.WorkingSet -ge 20MB }
+
+Handles  NPM(K)    PM(K)      WS(K) VM(M)   CPU(s)     Id ProcessName
+-------  ------    -----      ----- -----   ------     -- -----------
+    153       8    95836      46976   192   340.00   2436 dwm
+    693      30    38840      30728   228   184.33   2480 explorer
+    602      16    76868      72124   181            1032 svchost
+    347      17    19844      23044   318    53.63   1748 WINWORD
+    
+PS C:\PowerShell> dir | Select-Object Name,LastAccessTime
+
+Name                                    LastAccessTime
+----                                    --------------
+test.txt                                7/7/2007 11:33:29 PM
+test2.txt                               7/7/2007 11:33:34 PM
+
+PS C:\PowerShell> dir | Select-Object Name,@{Name="LastAccessWeekDay"; 
+    Expression={$_.LastAccessTime.DayOfWeek}}
+
+Name                                                LastAccessWeekDay
+----                                                -----------------
+test.txt                                                     Saturday
+test2.txt                                                    Saturday
+
+--------------------------
+PS C:\PowerShell> Get-Process | sort CPU -desc | select -first 2 | Stop-Process
+-whatif
+--------------------------
+
+PS C:\PowerShell> dir | Get-Acl | select Owner | sort Owner | ~CCC
+    Get-Unique -asString
+
+Owner
+-----
+NT AUTHORITY\SYSTEM
+NULL\Hristo
+
+PS C:\PowerShell> Get-Service | Group-Object Status
+
+Count Name                 Group
+----- ----                 -----
+   79 Running              {AeLookupSvc, Appinfo, AudioEndpointBuilder,...
+   64 Stopped              {ALG, AppMgmt, aspnet_state, Browser...}
+
+   
+PS D:\work> dir -r | Measure-Object -property Length -min -max -average -sum
+
+
+Count    : 5868
+Average  : 45224.3065780504
+Sum      : 265376231
+Maximum  : 19622912
+Minimum  : 0
+Property : Length
+
+PS C:\PowerShell> Get-Process notepad | Tee-Object -variable victims | ~CCC
+    Stop-Process
+
+PS C:\PowerShell> $victims | select ProcessName,HasExited
+
+ProcessName                                                      HasExited
+-----------                                                      ---------
+notepad                                                               True
+notepad                                                               True
+
+
+PS C:\PowerShell> $before = Get-Process
+PS C:\PowerShell> notepad.exe
+PS C:\PowerShell> Get-Process winword | Stop-Process
+PS C:\PowerShell> $after = Get-Process
+PS C:\PowerShell> Compare-Object $before $after
+
+InputObject                             SideIndicator
+-----------                             -------------
+System.Diagnostics.Process (notepad)    =>
+System.Diagnostics.Process (WINWORD)    <=
+
+
+
+PS C:\> diff (dir PowerShellBackup) (dir PowerShell) | ~CCC
+    where { $_.SideIndicator -eq "=>" } |              ~CCC
+    foreach { copy "C:\PowerShell\$($_.InputObject)"   ~CCC
+        "C:\PowerShellBackup" }
